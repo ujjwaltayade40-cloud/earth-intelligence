@@ -1,155 +1,386 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Earth Intelligence</title>
-
-<style>
+<meta name="theme-color" content="#030914">
+<title>Earth Intelligence</title><style>
 *{box-sizing:border-box}
-body{margin:0;background:#030914;color:#eaf6ff;font:15px Arial,sans-serif}
-header{padding:16px;background:#071426;border-bottom:1px solid #164b65}
-header h2{margin:0;color:#43caff}
-header p{margin:6px 0 0;color:#a9c8dc;font-size:12px}
-.layout{padding:12px;max-width:1400px;margin:auto}
-.panel{background:#091a2b;border:1px solid #17415b;border-radius:12px;padding:12px;margin-bottom:12px}
-#map{height:68vh;min-height:380px;width:100%;border-radius:9px;background:#0b1723}
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-input,button,a.btn{padding:12px;border-radius:8px;border:1px solid #236080;background:#102b40;color:white;font-size:14px}
-input{flex:1;min-width:150px}
-button,a.btn{cursor:pointer;text-decoration:none}
-button:hover,a.btn:hover{background:#15516d}
-.status{color:#36efb0;font-size:12px;margin-top:10px}
-.note{font-size:12px;color:#b1c8d9;line-height:1.6}
-footer{text-align:center;padding:20px;color:#7893a8;font-size:11px}
-@media(max-width:600px){#map{height:65vh;min-height:350px}header h2{font-size:19px}}
-</style>
-</head>
 
-<body>
-<header>
+body{
+  margin:0;
+  background:#030914;
+  color:#eaf6ff;
+  font:15px Arial,sans-serif
+}
+
+header{
+  padding:16px;
+  background:#071426;
+  border-bottom:1px solid #164b65
+}
+
+header h2{
+  margin:0;
+  color:#43caff
+}
+
+header p{
+  margin:6px 0 0;
+  color:#a9c8dc;
+  font-size:12px
+}
+
+.layout{
+  padding:12px;
+  max-width:1400px;
+  margin:auto
+}
+
+.panel{
+  background:#091a2b;
+  border:1px solid #17415b;
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:12px
+}
+
+#map{
+  height:65vh;
+  min-height:350px;
+  width:100%;
+  border-radius:9px;
+  background:#0b1723
+}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px
+}
+
+input,button,a.btn{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #236080;
+  background:#102b40;
+  color:white;
+  font-size:14px
+}
+
+input{
+  flex:1;
+  min-width:150px
+}
+
+button,a.btn{
+  cursor:pointer;
+  text-decoration:none
+}
+
+button:hover,a.btn:hover{
+  background:#15516d
+}
+
+.status{
+  color:#36efb0;
+  font-size:12px;
+  margin-top:10px;
+  overflow-wrap:anywhere
+}
+
+.note{
+  font-size:12px;
+  color:#b1c8d9;
+  line-height:1.7
+}
+
+.camera-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px
+}
+
+.camera-card{
+  padding:14px;
+  background:#071426;
+  border:1px solid #17415b;
+  border-radius:10px
+}
+
+.camera-card h4{
+  margin:0 0 8px;
+  color:#43caff
+}
+
+.camera-card p{
+  color:#b1c8d9;
+  font-size:12px;
+  line-height:1.6
+}
+
+.camera-card a{
+  display:inline-block;
+  color:#36efb0;
+  margin-top:6px
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#7893a8;
+  font-size:11px
+}
+
+@media(max-width:600px){
+  #map{height:58vh;min-height:320px}
+  header h2{font-size:19px}
+  button{flex-grow:1}
+}
+</style></head><body><header>
   <h2>🌍 EARTH INTELLIGENCE</h2>
-  <p>INTERACTIVE MAP • SATELLITE VIEW • PUBLIC CAMERAS</p>
-</header>
+  <p>INTERACTIVE MAP • SATELLITE VIEW • PUBLIC WEBCAMS</p>
+</header><main class="layout">  <section class="panel">
+    <h3>🛰️ Satellite Intelligence Map</h3><div class="controls">
+  <input id="place" type="search"
+    placeholder="Search city or place...">
 
-<main class="layout">
-  <section class="panel">
-    <div class="controls">
-      <input id="place" type="search"
-        placeholder="Search city or place...">
-      <button onclick="searchPlace()">🔎 Search</button>
-      <button onclick="showSatellite()">🛰️ Satellite</button>
-      <button onclick="showRoadmap()">🗺️ Roadmap</button>
-      <button onclick="focusIndia()">🇮🇳 India</button>
-      <button onclick="myLocation()">📍 My Location</button>
-    </div>
+  <button onclick="searchPlace()">🔎 Search</button>
+  <button onclick="showSatellite()">🛰️ Satellite</button>
+  <button onclick="showHybrid()">🌎 Hybrid</button>
+  <button onclick="showRoadmap()">🗺️ Roadmap</button>
+  <button onclick="focusIndia()">🇮🇳 India</button>
+  <button onclick="myLocation()">📍 My Location</button>
+  <button onclick="zoomIn()">➕ Zoom In</button>
+  <button onclick="zoomOut()">➖ Zoom Out</button>
+  <button onclick="resetMap()">🔄 Reset Map</button>
+</div>
 
-    <div id="map"></div>
-    <div id="status" class="status">Loading Google Maps...</div>
-  </section>
+<div id="map"></div>
 
-  <section class="panel">
-    <h3>📹 Public Live Cameras</h3>
-    <p class="note">
-      Explore publicly available webcams. These are separate from
-      the satellite map and may not be available at every location.
-    </p>
-    <a class="btn"
-      href="https://www.skylinewebcams.com/"
-      target="_blank" rel="noopener">
-      Explore Public Webcams ↗
+<div id="status" class="status" role="status">
+  Loading Google Maps...
+</div>
+
+<p class="note">
+  Click anywhere on the map to select coordinates.
+  Satellite imagery is not necessarily live.
+</p>
+
+  </section>  <section class="panel">
+    <h3>📹 Public Live Cameras</h3><p class="note">
+  Explore publicly available webcams. Availability depends
+  on the camera provider and location. These links do not
+  provide access to private CCTV systems.
+</p>
+
+<div class="camera-grid">
+
+  <div class="camera-card">
+    <h4>🌐 Public Webcams</h4>
+    <p>Explore publicly available cameras around the world.</p>
+    <a href="https://www.skylinewebcams.com/"
+       target="_blank" rel="noopener noreferrer">
+      Explore Webcams ↗
     </a>
-  </section>
+  </div>
 
-  <section class="panel">
-    <h3>ℹ️ About This Map</h3>
-    <p class="note">
-      Google Maps satellite imagery is not necessarily live.
-      Image detail and availability vary by location and zoom level.
-      This website does not track satellites or access private cameras.
+  <div class="camera-card">
+    <h4>🌍 EarthCam</h4>
+    <p>Explore public city views and webcams.</p>
+    <a href="https://www.earthcam.com/"
+       target="_blank" rel="noopener noreferrer">
+      Open EarthCam ↗
+    </a>
+  </div>
+
+  <div class="camera-card">
+    <h4>🏙️ WorldCam</h4>
+    <p>Browse publicly listed webcams in different places.</p>
+    <a href="https://worldcam.eu/"
+       target="_blank" rel="noopener noreferrer">
+      Explore WorldCam ↗
+    </a>
+  </div>
+
+</div>
+
+<p class="note">
+  Private CCTV footage and recordings require authorized
+  access to the camera system. This website does not
+  discover or access private cameras.
+</p>
+
+  </section>  <section class="panel">
+    <h3>📍 Selected Location</h3>
+    <p id="coordinates" class="note">
+      Click on the map to view coordinates.
     </p>
-  </section>
-</main>
+    <button onclick="copyCoordinates()">
+      📋 Copy Coordinates
+    </button>
+  </section>  <section class="panel">
+    <h3>ℹ️ About Earth Intelligence</h3>
+    <p class="note">
+      This website provides an interactive Google Maps interface,
+      satellite and hybrid map views, place search, zoom controls,
+      and links to public webcams.  It does not provide live satellite video, private CCTV access,
+  or satellite tracking. Imagery freshness and resolution vary
+  by location.
+</p>
 
-<footer>Earth Intelligence • Interactive Map</footer>
+  </section></main><footer>
+  Earth Intelligence • Interactive Map
+</footer><script>
+"use strict";
 
-<script>
-let map;
-let geocoder;
-let marker;
+let map = null;
+let geocoder = null;
+let marker = null;
+let selectedCoordinates = null;
+
+const statusElement = document.getElementById("status");
+
+function setStatus(message){
+  statusElement.textContent = message;
+}
 
 function initMap(){
   const india = {lat:20.5937,lng:78.9629};
 
-  map = new google.maps.Map(document.getElementById("map"),{
-    center:india,
-    zoom:5,
-    mapTypeId:"satellite",
-    mapTypeControl:true,
-    zoomControl:true,
-    streetViewControl:true,
-    fullscreenControl:true,
-    mapTypeControlOptions:{
-      style:google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-      mapTypeIds:["roadmap","satellite","hybrid","terrain"]
-    }
-  });
+  try{
+    map = new google.maps.Map(
+      document.getElementById("map"),
+      {
+        center:india,
+        zoom:5,
+        mapTypeId:"satellite",
+        mapTypeControl:true,
+        zoomControl:true,
+        streetViewControl:true,
+        fullscreenControl:true,
+        mapTypeControlOptions:{
+          mapTypeIds:[
+            "roadmap",
+            "satellite",
+            "hybrid",
+            "terrain"
+          ]
+        }
+      }
+    );
 
-  geocoder = new google.maps.Geocoder();
+    geocoder = new google.maps.Geocoder();
 
-  map.addListener("tilesloaded",()=>{
-    document.getElementById("status").textContent =
-      "Map loaded • Satellite imagery availability varies by location";
-  });
-
-  map.addListener("click",(event)=>{
-    if(marker) marker.setMap(null);
-
-    marker = new google.maps.Marker({
-      position:event.latLng,
-      map:map
+    map.addListener("tilesloaded",()=>{
+      setStatus(
+        "Map loaded • Satellite imagery is not necessarily live"
+      );
     });
 
-    document.getElementById("status").textContent =
-      "Selected coordinates: " +
-      event.latLng.lat().toFixed(5) + ", " +
-      event.latLng.lng().toFixed(5);
-  });
+    map.addListener("click",(event)=>{
+      const position = event.latLng;
+
+      selectedCoordinates = {
+        lat:position.lat(),
+        lng:position.lng()
+      };
+
+      if(marker){
+        marker.setMap(null);
+      }
+
+      marker = new google.maps.Marker({
+        position:position,
+        map:map
+      });
+
+      document.getElementById("coordinates").textContent =
+        "Latitude: " + selectedCoordinates.lat.toFixed(6) +
+        " | Longitude: " +
+        selectedCoordinates.lng.toFixed(6);
+
+      setStatus("Location selected successfully.");
+    });
+
+    setStatus("Google Maps initialized. Loading imagery...");
+
+  }catch(error){
+    console.error(error);
+    setStatus("Map initialization failed. Check browser console.");
+  }
 }
 
-function searchPlace(){
-  const query = document.getElementById("place").value.trim();
+window.gm_authFailure = function(){
+  setStatus(
+    "Google Maps authentication failed. Check API key, " +
+    "website restrictions, billing and API permissions."
+  );
+};
 
-  if(!query) {
-    document.getElementById("status").textContent =
-      "Please enter a city or place name.";
+function searchPlace(){
+  const query =
+    document.getElementById("place").value.trim();
+
+  if(!map || !geocoder){
+    setStatus("Google Maps is not ready yet.");
     return;
   }
 
-  geocoder.geocode({address:query},(results,status)=>{
-    if(status==="OK" && results[0]){
-      map.setCenter(results[0].geometry.location);
-      map.setZoom(16);
+  if(!query){
+    setStatus("Please enter a city or place name.");
+    return;
+  }
 
-      if(marker) marker.setMap(null);
+  setStatus("Searching for location...");
 
-      marker = new google.maps.Marker({
-        map:map,
-        position:results[0].geometry.location,
-        title:results[0].formatted_address
-      });
+  geocoder.geocode(
+    {address:query},
+    function(results,resultStatus){
 
-      document.getElementById("status").textContent =
-        "Location: " + results[0].formatted_address;
-    } else {
-      document.getElementById("status").textContent =
-        "Place not found. Check the name or API permissions.";
+      if(resultStatus === "OK" && results && results[0]){
+        const location = results[0].geometry.location;
+
+        map.setCenter(location);
+        map.setZoom(15);
+
+        if(marker){
+          marker.setMap(null);
+        }
+
+        marker = new google.maps.Marker({
+          map:map,
+          position:location,
+          title:results[0].formatted_address
+        });
+
+        selectedCoordinates = {
+          lat:location.lat(),
+          lng:location.lng()
+        };
+
+        document.getElementById("coordinates").textContent =
+          "Latitude: " + selectedCoordinates.lat.toFixed(6) +
+          " | Longitude: " +
+          selectedCoordinates.lng.toFixed(6);
+
+        setStatus("Location: " + results[0].formatted_address);
+
+      }else{
+        setStatus(
+          "Place not found. Check the place name and API permissions."
+        );
+      }
     }
-  });
+  );
 }
 
 function showSatellite(){
   if(map) map.setMapTypeId("satellite");
+}
+
+function showHybrid(){
+  if(map) map.setMapTypeId("hybrid");
 }
 
 function showRoadmap(){
@@ -157,47 +388,138 @@ function showRoadmap(){
 }
 
 function focusIndia(){
-  if(map){
-    map.setCenter({lat:20.5937,lng:78.9629});
-    map.setZoom(5);
+  if(!map) return;
+
+  map.setCenter({lat:20.5937,lng:78.9629});
+  map.setZoom(5);
+}
+
+function zoomIn(){
+  if(map) map.setZoom(map.getZoom()+1);
+}
+
+function zoomOut(){
+  if(map) map.setZoom(map.getZoom()-1);
+}
+
+function resetMap(){
+  if(!map) return;
+
+  map.setCenter({lat:20.5937,lng:78.9629});
+  map.setZoom(5);
+  map.setMapTypeId("satellite");
+
+  if(marker){
+    marker.setMap(null);
+    marker = null;
   }
+
+  selectedCoordinates = null;
+
+  document.getElementById("coordinates").textContent =
+    "Click on the map to view coordinates.";
+
+  setStatus("Map reset to India.");
 }
 
 function myLocation(){
-  if(!navigator.geolocation){
-    alert("Location is not supported by this browser.");
+  if(!map){
+    setStatus("Google Maps is not ready yet.");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(position=>{
-    const location={
-      lat:position.coords.latitude,
-      lng:position.coords.longitude
-    };
+  if(!navigator.geolocation){
+    setStatus("Location is not supported by this browser.");
+    return;
+  }
 
-    map.setCenter(location);
-    map.setZoom(16);
+  setStatus("Requesting location permission...");
 
-    if(marker) marker.setMap(null);
+  navigator.geolocation.getCurrentPosition(
+    function(position){
+      const location = {
+        lat:position.coords.latitude,
+        lng:position.coords.longitude
+      };
 
-    marker=new google.maps.Marker({
-      position:location,
-      map:map,
-      title:"Your location"
-    });
-  },()=>{
-    alert("Location permission was denied or location is unavailable.");
-  });
+      map.setCenter(location);
+      map.setZoom(16);
+
+      if(marker){
+        marker.setMap(null);
+      }
+
+      marker = new google.maps.Marker({
+        position:location,
+        map:map,
+        title:"Your location"
+      });
+
+      selectedCoordinates = location;
+
+      document.getElementById("coordinates").textContent =
+        "Latitude: " + location.lat.toFixed(6) +
+        " | Longitude: " + location.lng.toFixed(6);
+
+      setStatus("Your device location is displayed.");
+    },
+    function(error){
+      if(error.code === 1){
+        setStatus("Location permission denied.");
+      }else{
+        setStatus("Could not get location. Try again.");
+      }
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:10000,
+      maximumAge:0
+    }
+  );
 }
 
-document.getElementById("place").addEventListener("keydown",event=>{
-  if(event.key==="Enter") searchPlace();
-});
-</script>
+async function copyCoordinates(){
+  if(!selectedCoordinates){
+    setStatus("Select a location on the map first.");
+    return;
+  }
 
-<!-- Replace YOUR_API_KEY with your own Google Maps API key -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAn4AVOPt7pLx-SqKFScoZZUK3zPypMsEw=initMap"
-</script>
-</body>
+  const text =
+    selectedCoordinates.lat.toFixed(6) + ", " +
+    selectedCoordinates.lng.toFixed(6);
+
+  try{
+    await navigator.clipboard.writeText(text);
+    setStatus("Coordinates copied: " + text);
+  }catch(error){
+    setStatus("Clipboard unavailable. Coordinates: " + text);
+  }
+}
+
+document.getElementById("place").addEventListener(
+  "keydown",
+  function(event){
+    if(event.key === "Enter"){
+      searchPlace();
+    }
+  }
+);
+
+function mapLoadError(){
+  setStatus(
+    "Google Maps failed to load. Check API key, " +
+    "Maps JavaScript API, billing and website restrictions."
+  );
+}
+
+window.addEventListener("error",function(event){
+  if(event.message &&
+     event.message.toLowerCase().includes("google")){
+    mapLoadError();
+  }
+});
+</script><!-- Replace YOUR_API_KEY with your actual Google Maps API key --><script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAn4AVOPt7pLx-SqKFScoZZUK3zPypMsEw&callback=initMap&loading=async"
+  onerror="mapLoadError()">
+</script></body>
 </html>
