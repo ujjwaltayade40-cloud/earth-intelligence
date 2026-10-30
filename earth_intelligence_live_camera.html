@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earth Intelligence Demo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#03060a;color:#e8f5f1;font:14px system-ui,Arial,sans-serif}header{padding:14px 16px;background:#070d13;border-bottom:1px solid #18332f;display:flex;justify-content:space-between;align-items:center}.brand{color:#e9ca70;font-weight:800;letter-spacing:.2em}.status{font-size:10px;color:#00efa0}.layout{display:grid;grid-template-columns:1fr;gap:12px;padding:12px;max-width:1200px;margin:auto}.stage{height:58vh;min-height:350px;position:relative;border:1px solid #18332f;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 48%,#10252d,#03060a 66%)}#globe{position:absolute;inset:0}.overlay{position:absolute;z-index:2;top:12px;left:12px;pointer-events:none}.overlay strong{display:block;font-size:17px}.small{font-size:10px;color:#8da8ad}.right{display:grid;gap:12px}.panel{background:#09111a;border:1px solid #18332f;border-radius:12px;padding:13px}.title{color:#e9ca70;font-size:11px;letter-spacing:.16em;margin-bottom:10px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#0d1922;border:1px solid #18332f;border-radius:8px;padding:10px}.stat b{display:block;margin:5px 0;font-size:15px}.green{color:#00efa0;font-size:10px}button,.btn{display:inline-block;border:1px solid #236b55;border-radius:7px;padding:9px 11px;background:#10251f;color:#c9ffeb;text-decoration:none;font:inherit;font-size:12px;margin:3px 3px 0 0}p{color:#b5c7cc;font-size:12px;line-height:1.5}footer{text-align:center;color:#607982;font-size:10px;padding:16px}
+.livecam-btn{position:absolute;z-index:3;right:12px;top:12px;background:#00ef9f;color:#04110d;border:0;font-weight:800;box-shadow:0 0 18px #00ef9f55}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:#000d;align-items:center;justify-content:center;padding:14px}
+.modal.open{display:flex}.modal-card{width:min(900px,100%);background:#081019;border:1px solid #1f6a53;border-radius:12px;padding:12px;box-shadow:0 0 40px #00ef9f22}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}.modal-title{color:#00efa0;font-weight:800;letter-spacing:.12em;font-size:12px}.close{background:#18232c;border-color:#34414d;color:#fff;font-size:16px;padding:5px 10px}
+.video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media(min-width:780px){.layout{grid-template-columns:1.7fr 1fr}.stage{height:75vh}.right{align-content:start}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">◉ OSIRIS / EARTH</div><div class="small">INTERACTIVE GLOBE • DEMO DASHBOARD</div></div><div class="status">● DEMO MODE</div></header>
+<div class="layout">
+<section class="stage"><div class="overlay"><div class="green">GLOBAL VIEW / 01</div><strong>Earth Intelligence</strong><div class="small">Drag to rotate · pinch to zoom</div></div><div id="globe"></div></section>
+<div class="right">
+<section class="panel"><div class="title">SYSTEM OVERVIEW</div><div class="stats"><div class="stat">Globe<b id="globeStatus">LOADING…</b><span class="green">Interactive 3D view</span></div><div class="stat">Data points<b>DEMO</b><span class="green">Sample locations only</span></div><div class="stat">Satellite feed<b>NOT CONNECTED</b><span class="green">Needs data source</span></div><div class="stat">Camera feeds<b>AUTHORIZED</b><span class="green">Public/owned feeds only</span></div></div></section>
+<section class="panel"><div class="title">CAMERA DIRECTORY</div><p>This demo links to public webcam resources. It does not access private CCTV cameras.</p><a class="btn" href="https://www.skylinewebcams.com/" target="_blank" rel="noopener">Explore public webcams ↗</a></section>
+<section class="panel"><div class="title">CONTROLS</div><p>Sample dots are decorative, not live tracking. Internet access is required to load the globe library and Earth imagery.</p><button onclick="focusIndia()">Focus India</button><button onclick="resetGlobe()">Reset globe</button><p id="help" class="small">If the globe does not load, check your internet or try hosting this file online.</p></section>
+</div></div>
+<div class="modal" id="cameraModal" role="dialog" aria-modal="true" aria-label="Public live camera">
+ <div class="modal-card">
+  <div class="modal-head"><div><div class="modal-title">● PUBLIC LIVE CAMERA</div><div class="small">Publicly broadcast Earth view • Stream may occasionally be offline</div></div><button class="close" onclick="closeCamera()" aria-label="Close camera">✕</button></div>
+  <div class="video-wrap"><iframe id="cameraFrame" title="Public live camera stream" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <p>Only public streams published for viewing are shown here. This does not connect to private CCTV.</p>
+  <a class="btn" href="https://www.livepublicwebcams.com/" target="_blank" rel="noopener">Browse more public live cameras ↗</a>
+ </div>
+</div>
+<footer>Personal demo prototype • Public stream only; not a private CCTV system</footer>
+<script>
+function openCamera(){
+ document.getElementById('cameraModal').classList.add('open');
+ document.getElementById('cameraFrame').src='https://www.youtube-nocookie.com/embed/xRPjKQtRXR8?autoplay=1&mute=1';
+}
+function closeCamera(){
+ document.getElementById('cameraModal').classList.remove('open');
+ document.getElementById('cameraFrame').src='about:blank';
+}
+document.getElementById('cameraModal').addEventListener('click',function(e){if(e.target===this)closeCamera()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCamera()});
+</script>
+<script>
+const statusEl=document.getElementById('globeStatus');
+function loadScript(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.head.appendChild(s);});}
+async function start(){
+ const sources=['https://unpkg.com/globe.gl','https://cdn.jsdelivr.net/npm/globe.gl'];
+ let loaded=false;
+ for(const src of sources){try{await loadScript(src);if(window.Globe){loaded=true;break;}}catch(e){}}
+ if(!loaded){statusEl.textContent='OFFLINE';document.getElementById('help').textContent='Could not load the 3D library. Check internet, then reload this page. If hosted, check the hosting URL.';return;}
+ try{
+  const host=document.getElementById('globe');
+  const dots=Array.from({length:260},()=>({lat:Math.random()*150-70,lng:Math.random()*360-180,size:Math.random()*0.22+0.07,color:Math.random()>.8?'#ffb52e':'#00f5a0'}));
+  window.earthGlobe=Globe()(host).globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg').backgroundColor('#03060a').showAtmosphere(true).atmosphereColor('#00a887').atmosphereAltitude(.16).pointsData(dots).pointLat('lat').pointLng('lng').pointColor('color').pointRadius('size').pointAltitude(.012);
+  earthGlobe.controls().autoRotate=true;earthGlobe.controls().autoRotateSpeed=.35;
+  const resize=()=>{earthGlobe.width(host.clientWidth);earthGlobe.height(host.clientHeight)};resize();window.addEventListener('resize',resize);
+  statusEl.textContent='ONLINE';
+ }catch(e){statusEl.textContent='ERROR';document.getElementById('help').textContent='The globe failed to initialize. Reload the page and check that JavaScript is enabled.';}
+}
+function focusIndia(){if(window.earthGlobe)earthGlobe.pointOfView({lat:20.59,lng:78.96,altitude:1.8},1000)}
+function resetGlobe(){if(window.earthGlobe)earthGlobe.pointOfView({lat:15,lng:0,altitude:2.4},1000)}
+start();
+</script>
+</body>
+</html>
