@@ -2,474 +2,126 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Earth Intelligence</title>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #020711;
-  color: #e6f7ff;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-}
-
-header {
-  height: 70px;
-  padding: 0 22px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #06101d;
-  border-bottom: 1px solid #12354a;
-}
-
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.logo span {
-  color: #00cfff;
-}
-
-.status {
-  color: #57e6a4;
-  font-size: 12px;
-}
-
-main {
-  height: calc(100vh - 110px);
-  position: relative;
-}
-
-#globe {
-  position: absolute;
-  inset: 0;
-  touch-action: none;
-}
-
-.panel {
-  position: absolute;
-  z-index: 2;
-  top: 20px;
-  left: 18px;
-  width: 225px;
-  padding: 17px;
-  border: 1px solid #17445d;
-  border-radius: 12px;
-  background: rgba(3, 15, 29, 0.88);
-  box-shadow: 0 0 25px #007da522;
-  pointer-events: none;
-}
-
-.panel h2 {
-  font-size: 13px;
-  color: #00d9ff;
-  letter-spacing: 2px;
-  margin: 0 0 17px;
-}
-
-.label {
-  font-size: 10px;
-  color: #7799ad;
-  margin-top: 15px;
-}
-
-.value {
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.controls {
-  position: absolute;
-  z-index: 3;
-  right: 20px;
-  bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-button {
-  width: 48px;
-  height: 45px;
-  border: 1px solid #176080;
-  border-radius: 9px;
-  color: #00d9ff;
-  background: #061a2b;
-  font-size: 23px;
-  cursor: pointer;
-}
-
-button:active {
-  background: #10405a;
-}
-
-.hint {
-  position: absolute;
-  bottom: 24px;
-  left: 20px;
-  z-index: 2;
-  color: #6d96aa;
-  font-size: 11px;
-  pointer-events: none;
-}
-
-footer {
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid #12354a;
-  color: #65899d;
-  font-size: 10px;
-  letter-spacing: 1px;
-}
-
-@media (max-width: 600px) {
-  header {
-    height: 60px;
-    padding: 0 13px;
-  }
-
-  .logo {
-    font-size: 15px;
-    letter-spacing: 1px;
-  }
-
-  .panel {
-    top: 12px;
-    left: 10px;
-    width: 165px;
-    padding: 12px;
-  }
-
-  .panel h2 {
-    font-size: 11px;
-  }
-
-  .value {
-    font-size: 12px;
-  }
-
-  .controls {
-    right: 12px;
-    bottom: 65px;
-  }
-
-  .hint {
-    bottom: 17px;
-    left: 10px;
-    max-width: 70%;
-    line-height: 1.5;
-  }
-
-  main {
-    height: calc(100dvh - 100px);
-  }
-
-  footer {
-    height: 40px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#050912;color:#eaf6ff;font-family:Arial,sans-serif}
+header{padding:16px;text-align:center;border-bottom:1px solid #18334b}
+header h1{margin:0;font-size:22px;letter-spacing:3px}
+header p{margin:7px 0 0;color:#82a9c5;font-size:12px}
+main{padding:14px;max-width:1100px;margin:auto}
+.panel{background:#0a1422;border:1px solid #19334b;border-radius:14px;margin-bottom:16px;overflow:hidden}
+.panel h2{font-size:15px;margin:0;padding:14px;border-bottom:1px solid #19334b}
+#globe{height:340px;width:100%;display:block}
+#map{height:420px;width:100%;background:#101a27}
+.note{padding:12px;color:#8da9bd;font-size:12px;line-height:1.5}
+footer{text-align:center;color:#58758c;font-size:11px;padding:12px}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">EARTH <span>INTELLIGENCE</span></div>
-  <div class="status">● SYSTEM ONLINE</div>
+  <h1>EARTH INTELLIGENCE</h1>
+  <p>3D EARTH • SATELLITE MAP</p>
 </header>
 
 <main>
-  <div id="globe"></div>
-
   <section class="panel">
-    <h2>PLANETARY DISPLAY</h2>
-
-    <div class="label">OBJECT</div>
-    <div class="value">Earth — 3D Globe</div>
-
-    <div class="label">VISUALIZATION</div>
-    <div class="value">Blue Grid Sphere</div>
-
-    <div class="label">ROTATION</div>
-    <div class="value" id="rotationStatus">AUTO ROTATION</div>
-
-    <div class="label">ZOOM LEVEL</div>
-    <div class="value" id="zoomLevel">1.0×</div>
+    <h2>🌍 3D EARTH GLOBE</h2>
+    <div id="globe"></div>
+    <div class="note">Drag to rotate • Pinch or scroll to zoom</div>
   </section>
 
-  <div class="controls">
-    <button id="zoomIn" aria-label="Zoom in">+</button>
-    <button id="zoomOut" aria-label="Zoom out">−</button>
-    <button id="rotate" aria-label="Toggle rotation">⟳</button>
-  </div>
-
-  <div class="hint">
-    DRAG TO ROTATE · SCROLL TO ZOOM
-  </div>
+  <section class="panel">
+    <h2>🛰️ SATELLITE MAP</h2>
+    <div id="map"></div>
+    <div class="note">
+      Satellite imagery is not live video. Image dates and detail vary by location.
+      Drag and pinch to explore the map.
+    </div>
+  </section>
 </main>
 
-<footer>
-  EARTH INTELLIGENCE · 3D VISUALIZATION
-</footer>
+<footer>EARTH INTELLIGENCE • MAP DATA PROVIDED BY GOOGLE</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script type="module">
+import * as THREE from
+'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from
+'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
-<script>
-(() => {
-  const container = document.getElementById("globe");
+const host = document.getElementById('globe');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#050912');
 
-  if (!window.THREE) {
-    container.innerHTML =
-      '<div style="padding:30px;color:#ff8080">Unable to load 3D engine. Check your internet connection and reload.</div>';
-    return;
-  }
+const camera = new THREE.PerspectiveCamera(
+  45, host.clientWidth / host.clientHeight, 0.1, 100
+);
+camera.position.z = 3.2;
 
-  const scene = new THREE.Scene();
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.setSize(host.clientWidth,host.clientHeight);
+host.appendChild(renderer.domElement);
 
-  const camera = new THREE.PerspectiveCamera(
-    45,
-    container.clientWidth / container.clientHeight,
-    0.1,
-    100
-  );
+scene.add(new THREE.AmbientLight(0xffffff,2));
 
-  camera.position.z = 5.2;
+const light = new THREE.DirectionalLight(0xffffff,2.5);
+light.position.set(5,3,5);
+scene.add(light);
 
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    alpha: true
-  });
+const loader = new THREE.TextureLoader();
+const earthTexture = loader.load(
+ 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg'
+);
+earthTexture.colorSpace = THREE.SRGBColorSpace;
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
+const earth = new THREE.Mesh(
+ new THREE.SphereGeometry(1,64,64),
+ new THREE.MeshStandardMaterial({map:earthTexture,roughness:1})
+);
+scene.add(earth);
 
-  const earth = new THREE.Group();
-  scene.add(earth);
+const controls = new OrbitControls(camera,renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 1.5;
+controls.maxDistance = 7;
 
-  // Blue planetary sphere
-  const sphereGeometry = new THREE.SphereGeometry(1.35, 64, 48);
+function resize(){
+ const w=host.clientWidth,h=host.clientHeight;
+ camera.aspect=w/h;
+ camera.updateProjectionMatrix();
+ renderer.setSize(w,h);
+}
+window.addEventListener('resize',resize);
 
-  const sphereMaterial = new THREE.MeshPhongMaterial({
-    color: 0x075aab,
-    emissive: 0x001a45,
-    shininess: 45,
-    transparent: true,
-    opacity: 0.96
-  });
-
-  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  earth.add(sphere);
-
-  // Latitude and longitude grid
-  const gridMaterial = new THREE.LineBasicMaterial({
-    color: 0x35d9ff,
-    transparent: true,
-    opacity: 0.48
-  });
-
-  function addLine(points) {
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    earth.add(new THREE.Line(geometry, gridMaterial));
-  }
-
-  const radius = 1.358;
-  const segments = 160;
-
-  // Longitude lines
-  for (let i = 0; i < 18; i++) {
-    const longitude = (i * Math.PI) / 18;
-    const points = [];
-
-    for (let j = 0; j <= segments; j++) {
-      const latitude = -Math.PI / 2 + (j / segments) * Math.PI;
-
-      points.push(new THREE.Vector3(
-        radius * Math.cos(latitude) * Math.cos(longitude),
-        radius * Math.sin(latitude),
-        radius * Math.cos(latitude) * Math.sin(longitude)
-      ));
-    }
-
-    addLine(points);
-  }
-
-  // Latitude lines
-  for (let i = -5; i <= 5; i++) {
-    const latitude = (i * Math.PI) / 12;
-    const points = [];
-
-    for (let j = 0; j <= segments; j++) {
-      const longitude = (j / segments) * Math.PI * 2;
-
-      points.push(new THREE.Vector3(
-        radius * Math.cos(latitude) * Math.cos(longitude),
-        radius * Math.sin(latitude),
-        radius * Math.cos(latitude) * Math.sin(longitude)
-      ));
-    }
-
-    addLine(points);
-  }
-
-  // Outer atmospheric glow
-  const glow = new THREE.Mesh(
-    new THREE.SphereGeometry(1.42, 48, 32),
-    new THREE.MeshBasicMaterial({
-      color: 0x008cff,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.09
-    })
-  );
-
-  earth.add(glow);
-
-  // Lighting
-  scene.add(new THREE.AmbientLight(0x649acb, 1.5));
-
-  const light = new THREE.DirectionalLight(0xffffff, 2.4);
-  light.position.set(4, 3, 5);
-  scene.add(light);
-
-  // Background stars
-  const starPositions = [];
-
-  for (let i = 0; i < 1400; i++) {
-    starPositions.push(
-      (Math.random() - 0.5) * 35,
-      (Math.random() - 0.5) * 35,
-      -2 - Math.random() * 18
-    );
-  }
-
-  const starGeometry = new THREE.BufferGeometry();
-
-  starGeometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(starPositions, 3)
-  );
-
-  const stars = new THREE.Points(
-    starGeometry,
-    new THREE.PointsMaterial({
-      color: 0x8bdfff,
-      size: 0.025,
-      transparent: true,
-      opacity: 0.8
-    })
-  );
-
-  scene.add(stars);
-
-  // Interaction
-  let autoRotate = true;
-  let dragging = false;
-  let previousX = 0;
-  let previousY = 0;
-
-  container.addEventListener("pointerdown", event => {
-    dragging = true;
-    previousX = event.clientX;
-    previousY = event.clientY;
-    container.setPointerCapture(event.pointerId);
-  });
-
-  container.addEventListener("pointermove", event => {
-    if (!dragging) return;
-
-    const dx = event.clientX - previousX;
-    const dy = event.clientY - previousY;
-
-    earth.rotation.y += dx * 0.006;
-    earth.rotation.x += dy * 0.006;
-
-    earth.rotation.x = Math.max(
-      -Math.PI / 2,
-      Math.min(Math.PI / 2, earth.rotation.x)
-    );
-
-    previousX = event.clientX;
-    previousY = event.clientY;
-  });
-
-  function stopDragging() {
-    dragging = false;
-  }
-
-  container.addEventListener("pointerup", stopDragging);
-  container.addEventListener("pointercancel", stopDragging);
-
-  let zoom = 5.2;
-
-  function updateZoom() {
-    camera.position.z = zoom;
-
-    document.getElementById("zoomLevel").textContent =
-      (5.2 / zoom).toFixed(1) + "×";
-  }
-
-  document.getElementById("zoomIn").addEventListener("click", () => {
-    zoom = Math.max(2.8, zoom - 0.4);
-    updateZoom();
-  });
-
-  document.getElementById("zoomOut").addEventListener("click", () => {
-    zoom = Math.min(9, zoom + 0.4);
-    updateZoom();
-  });
-
-  container.addEventListener("wheel", event => {
-    event.preventDefault();
-
-    zoom += event.deltaY * 0.003;
-    zoom = Math.max(2.8, Math.min(9, zoom));
-
-    updateZoom();
-  }, { passive: false });
-
-  document.getElementById("rotate").addEventListener("click", () => {
-    autoRotate = !autoRotate;
-
-    document.getElementById("rotationStatus").textContent =
-      autoRotate ? "AUTO ROTATION" : "MANUAL ROTATION";
-  });
-
-  // Responsive layout
-  window.addEventListener("resize", () => {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(width, height);
-  });
-
-  // Animation loop
-  function animate() {
-    requestAnimationFrame(animate);
-
-    if (autoRotate && !dragging) {
-      earth.rotation.y += 0.0025;
-    }
-
-    renderer.render(scene, camera);
-  }
-
-  animate();
-})();
+function animate(){
+ requestAnimationFrame(animate);
+ controls.update();
+ renderer.render(scene,camera);
+}
+animate();
 </script>
 
+<script>
+function initMap(){
+  const map = new google.maps.Map(document.getElementById('map'),{
+    center:{lat:20.5937,lng:78.9629},
+    zoom:4,
+    mapTypeId:'satellite',
+    streetViewControl:false,
+    mapTypeControl:true,
+    fullscreenControl:true,
+    zoomControl:true
+  });
+}
+window.initMap=initMap;
+</script>
+
+<!-- Replace YOUR_API_KEY with your own key. Do not share it publicly. -->
+<script async
+ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAn4AVOPt7pLx-SqKFScoZZUK3zPypMsEw&callback=initMap">
+</script>
 </body>
 </html>
